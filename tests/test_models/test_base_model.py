@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """Test BaseModel for expected behavior and documentation"""
-from datetime import datetime
+from datetime import datetime, timedelta
 import inspect
 import models
 import pep8 as pycodestyle
 import time
 import unittest
 from unittest import mock
+
 BaseModel = models.base_model.BaseModel
 module_doc = models.base_model.__doc__
 
@@ -58,6 +59,7 @@ class TestBaseModelDocs(unittest.TestCase):
 
 class TestBaseModel(unittest.TestCase):
     """Test the BaseModel class"""
+
     def test_instantiation(self):
         """Test that object is correctly created"""
         inst = BaseModel()
@@ -82,9 +84,9 @@ class TestBaseModel(unittest.TestCase):
         """Test that two BaseModel instances have different datetime objects
         and that upon creation have identical updated_at and created_at
         value."""
-        tic = datetime.now()
+        tic = datetime.now() - timedelta(seconds=10)
         inst1 = BaseModel()
-        toc = datetime.now()
+        toc = datetime.now() + timedelta(seconds=10)
         self.assertTrue(tic <= inst1.created_at <= toc)
         time.sleep(1e-4)
         tic = datetime.now()
