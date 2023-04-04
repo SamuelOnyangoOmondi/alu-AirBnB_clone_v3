@@ -2,10 +2,13 @@
 """First api with flask and python"""
 
 import os
+import sys
 from models import storage
-from api.v1.views import app_views
+from api.views import app_views
 from flask import Flask, jsonify, make_response
 from flask_cors import CORS
+
+sys.path.append('/path/to/api')
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
