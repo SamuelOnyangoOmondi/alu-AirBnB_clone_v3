@@ -1,37 +1,31 @@
 #!/usr/bin/python3
-"""
-Flask route that returns json status response
-"""
+"""create a new view for State objects
+that handles all default RestFul API actions"""
+
 from api.v1.views import app_views
-from flask import jsonify, request
 from models import storage
+from flask import jsonify
 
 
-@app_views.route('/status', methods=['GET'])
+@app_views.route('/status')
 def status():
-    """
-    function for status route that returns the status
-    """
-    if request.method == 'GET':
-        resp = {"status": "OK"}
-        return jsonify(resp)
+    """return a JSON"""
+    return jsonify({"status": "OK"})
 
 
-@app_views.route('/stats', methods=['GET'])
-def stats():
-    """
-    function to return the count of all class objects
-    """
-    if request.method == 'GET':
-        response = {}
-        PLURALS = {
-            "Amenity": "amenities",
-            "City": "cities",
-            "Place": "places",
-            "Review": "reviews",
-            "State": "states",
-            "User": "users"
-        }
-        for key, value in PLURALS.items():
-            response[value] = storage.count(key)
-        return jsonify(response)
+@app_views.route('/stats')
+def get_count():
+    """return the number of states"""
+    from models.state import State
+    from models.city import City
+    from models.user import User
+    from models.place import Place
+    from models.review import Review
+    from models.amenity import Amenity
+    classes = {Amenity: "amenities",
+               City: "cities",
+               Place: "places",
+               Review: "reviews",
+               State: "states",
+               User: "users"}
+    return jsonify({name: storage.count(cls) for cls, name in classes.items()})
